@@ -1,21 +1,19 @@
-import {
-  Stream,
-  ParsedStream,
-  StreamRequest,
-  ParsedNameData,
-  Config,
-  ErrorStream,
-  ParseResult,
-} from '@aiostreams/types';
+import { codeToLanguage, emojiToLanguage } from '@aiostreams/formatters';
 import { parseFilename } from '@aiostreams/parser';
 import {
+  Config,
+  ParsedNameData,
+  ParsedStream,
+  ParseResult,
+  Stream,
+  StreamRequest
+} from '@aiostreams/types';
+import {
+  createLogger,
   getTextHash,
   serviceDetails,
   Settings,
-  createLogger,
 } from '@aiostreams/utils';
-import { fetch as uFetch, ProxyAgent } from 'undici';
-import { emojiToLanguage, codeToLanguage } from '@aiostreams/formatters';
 
 const logger = createLogger('wrappers');
 
@@ -157,8 +155,7 @@ export class BaseWrapper {
     );
 
     let response = useProxy
-      ? uFetch(url, {
-          dispatcher: new ProxyAgent(Settings.ADDON_PROXY),
+      ? fetch(url, {
           method: 'GET',
           headers: headers,
           signal: AbortSignal.timeout(this.indexerTimeout),
